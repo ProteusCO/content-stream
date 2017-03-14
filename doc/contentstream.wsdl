@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions
+    xmlns:impl="https://contentstream.cfemedia.com/api/ContentStream"
+    xmlns:intf="https://contentstream.cfemedia.com/api/ContentStream"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="https://contentstream.cfemedia.com/api/ContentStream">
+  <wsdl:types>
+    <schema elementFormDefault="qualified"
+        xmlns:impl="https://contentstream.cfemedia.com/api/ContentStream"
+        xmlns:intf="https://contentstream.cfemedia.com/api/ContentStream"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="https://contentstream.cfemedia.com/api/ContentStream" >
+      <element name="getContentList">
+        <complexType>
+          <sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="feedDefinitionId" type="xsd:int"/>
+            <xsd:element name="maxNumberResultsRequested" type="xsd:int"/>
+            <xsd:element name="offset" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="getContentListResponse">
+        <complexType>
+          <sequence>
+            <xsd:element name="errorOccurred" type="xsd:int"/>
+            <xsd:element name="errorDescription" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="arrUid" maxOccurs="unbounded" minOccurs="0" type="xsd:int"/>
+            <xsd:element name="arrTitle" maxOccurs="unbounded" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="arrDateTime" maxOccurs="unbounded" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="totalNumberInQueue" minOccurs="0" type="xsd:int"/>
+            <xsd:element name="moreResults" minOccurs="0" type="xsd:int"/>
+            <xsd:element name="startingOffset" minOccurs="0" type="xsd:int"/>
+            <xsd:element name="endingOffset" minOccurs="0" type="xsd:int"/>
+            <xsd:element name="feedDefinitionId" minOccurs="0" type="xsd:int"/>
+          </sequence>
+        </complexType>
+      </element>
+      <xsd:element name="getArticle">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="uid" type="xsd:int"/>
+            <xsd:element name="feedDefinitionId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getArticleResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="errorOccurred" type="xsd:int"/>
+            <xsd:element name="errorDescription" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="articleXMLURL" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="arrArticleAssetURL" maxOccurs="unbounded" minOccurs="0" type="xsd:string"></xsd:element>
+            <xsd:element name="arrArticleAssetFileName" maxOccurs="unbounded" minOccurs="0" type="xsd:string"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getDigitalAsset">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="uid" type="xsd:int"/>
+            <xsd:element name="feedDefinitionId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getDigitalAssetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="errorOccurred" type="xsd:int"/>
+            <xsd:element name="errorDescription" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="digitalAssetXMLURL" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="digitalAssetURL" minOccurs="0" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="deleteFromQueue">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="feedDefinitionId" type="xsd:int"/>
+            <xsd:element name="uid" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="deleteFromQueueResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="errorOccurred" type="xsd:int"/>
+            <xsd:element name="errorDescription" minOccurs="0" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="getContentListRequest">
+    <wsdl:part name="parameters" element="impl:getContentList" />
+  </wsdl:message>
+  <wsdl:message name="getContentListResponse">
+    <wsdl:part name="parameters" element="impl:getContentListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getArticleRequest">
+    <wsdl:part name="parameters" element="impl:getArticle" />
+  </wsdl:message>
+  <wsdl:message name="getArticleResponse">
+    <wsdl:part name="parameters" element="impl:getArticleResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDigitalAssetRequest">
+    <wsdl:part name="parameters" element="impl:getDigitalAsset" />
+  </wsdl:message>
+  <wsdl:message name="getDigitalAssetResponse">
+    <wsdl:part name="parameters" element="impl:getDigitalAssetResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteFromQueueRequest">
+    <wsdl:part name="parameters" element="impl:deleteFromQueue" />
+  </wsdl:message>
+  <wsdl:message name="deleteFromQueueResponse">
+    <wsdl:part name="parameters" element="impl:deleteFromQueueResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ContentStream">
+    <wsdl:operation name="getContentList">
+      <wsdl:input name="getContentListRequest" message="impl:getContentListRequest" />
+      <wsdl:output name="getContentListResponse" message="impl:getContentListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getArticle">
+      <wsdl:input name="getArticleRequest" message="impl:getArticleRequest" />
+      <wsdl:output name="getArticleResponse" message="impl:getArticleResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getDigitalAsset">
+      <wsdl:input name="getDigitalAssetRequest" message="impl:getDigitalAssetRequest" />
+      <wsdl:output name="getDigitalAssetResponse" message="impl:getDigitalAssetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteFromQueue">
+      <wsdl:input name="deleteFromQueueRequest" message="impl:deleteFromQueueRequest" />
+      <wsdl:output name="deleteFromQueueResponse" message="impl:deleteFromQueueResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContentStreamSoapBinding" type="impl:ContentStream">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="getContentList">
+      <wsdlsoap:operation soapAction="ContentStream#getContentList" />
+      <wsdl:input name="getContentListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getContentListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArticle">
+      <wsdlsoap:operation soapAction="ContentStream#getArticle" />
+      <wsdl:input name="getArticleRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getArticleResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDigitalAsset">
+      <wsdlsoap:operation soapAction="ContentStream#getDigitalAsset" />
+      <wsdl:input name="getDigitalAssetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getDigitalAssetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteFromQueue">
+      <wsdlsoap:operation soapAction="ContentStream#deleteFromQueue" />
+      <wsdl:input name="deleteFromQueueRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteFromQueueResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContentStream">
+    <wsdl:port binding="impl:ContentStreamSoapBinding" name="ContentStream">
+      <wsdlsoap:address location="https://contentstream.cfemedia.com/api/ContentStream.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

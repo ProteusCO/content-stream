@@ -1,0 +1,141 @@
+import com.proteusframework.build.GitInfo
+import com.proteusframework.build.Version
+import org.gradle.authentication.http.BasicAuthentication
+
+buildscript {
+    repositories {
+        if(hasLocalRepo){ maven { url = local_repo } }
+        jcenter()
+        maven {
+            credentials {
+                username "${repo_venturetech_username}"
+                password "${repo_venturetech_password?:''}"
+            }
+            url repoReleaseURL
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:1.3.0'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:latest.release'
+
+    }
+}
+
+repositories {
+    if(hasLocalRepo){ maven { url = local_repo } }
+    maven {
+        url repoReleaseURL
+        credentials {
+            username repo_venturetech_username
+            password repo_venturetech_password
+        }
+    }
+    maven {
+        url repoSnapshotURL
+        credentials {
+            username repo_venturetech_username
+            password repo_venturetech_password
+        }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'ivy-publish'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+GitInfo.populateProject(project)
+
+group = app_group
+version = new Version(app_version, rootProject)
+project.status = version.status
+buildDir = build_dir
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': "Proteus Framework ${project.name.capitalize()} API",
+                   'Implementation-Version': version,
+                   'Commit-ID': gitinfo.commit
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+repositories {
+    mavenLocal()
+    if(hasLocalRepo){ maven { url = local_repo } }
+    maven {
+        credentials {
+            username repo_venturetech_username
+            password repo_venturetech_password
+        }
+        url repoReleaseURL
+        authentication {
+            basic(BasicAuthentication)
+        }
+    }
+}
+
+dependencies {
+    compile group: 'org.apache.axis', name: 'axis', version: '1.4'
+    compile group: 'javax.xml', name: 'jaxrpc-api', version: '1.1'
+}
+
+task sourceJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    include 'com/i2rd/**'
+}
+
+publishing {
+    publications {
+        mavenPub(MavenPublication) {
+            from components.java
+            artifactId archivesBaseName
+            artifact(sourceJar) {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+artifactoryPublish.doFirst {
+    if ("${publish_venturetech_username}".trim().isEmpty()) println "Missing property: publish_venturetech_username"
+    if ("${publish_venturetech_password}".trim().isEmpty()) println "Missing property: publish_venturetech_password"
+}
+
+artifactory {
+    contextUrl = publish_venture_tech_url
+
+    publish {
+        repository {
+            repoKey = (version.isSnapshot() ? publish_venture_tech_snapshot_key : publish_venture_tech_release_key)
+            username = publish_venturetech_username
+            password = publish_venturetech_password
+        }
+        defaults {
+            publications('mavenPub')
+            properties = [
+                'status'      : version.status, 'release.status': version.status,
+                'build.status': version.status, 'commit': gitinfo.commit,
+                'branch'      : gitinfo.branch
+            ]
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'release'
+            username = repo_venturetech_username
+            password = repo_venturetech_password
+        }
+    }
+
+    clientConfig.info.vcsRevision = gitinfo.commit
+
+}
